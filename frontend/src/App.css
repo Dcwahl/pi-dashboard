@@ -42,3 +42,169 @@ h1 {
   font-size: 0.9rem;
   margin-top: 0.5rem;
 }
+
+/* Docker Section */
+.docker-section {
+  margin-top: 3rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.subsection-title {
+  font-size: 1.2rem;
+  margin: 2rem 0 1rem 0;
+  color: #ccc;
+}
+
+.docker-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.status-running {
+  color: #4CAF50;
+}
+
+.status-stopped {
+  color: #888;
+}
+
+/* Container Cards */
+.containers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.container-card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.container-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.container-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.status-badge.running {
+  background: #4CAF50;
+  color: #000;
+}
+
+.status-badge.exited {
+  background: #666;
+  color: #fff;
+}
+
+.container-image {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  font-family: monospace;
+}
+
+.container-stats {
+  margin-top: 1rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background: #252525;
+  border-radius: 4px;
+}
+
+.stat-label {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.container-uptime {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+/* Images List */
+.images-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.image-item {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.image-tag {
+  background: #2196F3;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.image-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.image-size {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.image-date {
+  color: #666;
+}
