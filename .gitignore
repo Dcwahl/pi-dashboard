@@ -28,3 +28,8 @@ Thumbs.db
 
 # Docker
 *.log
+
+# Database
+backend/data/
+*.db
+*.db-journal

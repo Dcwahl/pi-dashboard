@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
+import CPUChart from './components/CPUChart'
 
 const API_URL = import.meta.env.PROD ? '' : 'http://localhost:8000'
 
@@ -53,10 +54,7 @@ function App() {
       <h1>Raspberry Pi Dashboard</h1>
       
       <div className="metrics-grid">
-        <div className="metric-card">
-          <h2>CPU Usage</h2>
-          <div className="metric-value">{metrics.cpu.percent.toFixed(1)}%</div>
-        </div>
+        <CPUChart />
 
         <div className="metric-card">
           <h2>Memory</h2>

@@ -43,6 +43,21 @@ h1 {
   margin-top: 0.5rem;
 }
 
+/* CPU Chart Card */
+.cpu-chart-card {
+  grid-column: span 2;
+}
+
+.chart-container {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .cpu-chart-card {
+    grid-column: span 1;
+  }
+}
+
 /* Docker Section */
 .docker-section {
   margin-top: 3rem;
