@@ -9,6 +9,7 @@ from metrics.collectors import (
     get_network_stats,
     get_system_uptime
 )
+from metrics.docker_collectors import get_docker_containers, get_docker_images
 
 app = FastAPI(title="Pi Dashboard API")
 
@@ -36,6 +37,13 @@ def get_metrics():
         "uptime": get_system_uptime()
     }
 
+@app.get("/api/docker")
+def get_docker_info():
+    return {
+        "containers": get_docker_containers(),
+        "images": get_docker_images()
+    }
+
 @app.get("/api/metrics/cpu")
 def get_cpu():
     return get_cpu_usage()
@@ -55,6 +63,14 @@ def get_temp():
 @app.get("/api/metrics/network")
 def get_network():
     return get_network_stats()
+
+@app.get("/api/docker/containers")
+def get_containers():
+    return get_docker_containers()
+
+@app.get("/api/docker/images")
+def get_images():
+    return get_docker_images()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
