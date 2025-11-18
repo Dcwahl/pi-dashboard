@@ -40,7 +40,7 @@ function App() {
     const interval = setInterval(() => {
       fetchMetrics()
       fetchDocker()
-    }, 2000)
+    }, 5000)
 
     return () => clearInterval(interval)
   }, [])
