@@ -12,7 +12,9 @@ services:
       # Mount host system directories for metrics
       - /sys:/sys:ro
       - /proc:/proc:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro 
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Persist metrics database
+      - ./backend/data:/app/backend/data
     privileged: true  # Needed for hardware metrics
     restart: unless-stopped
     environment:

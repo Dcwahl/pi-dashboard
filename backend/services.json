@@ -1,0 +1,10 @@
+{
+  "services": [
+    {
+      "name": "Notification Server",
+      "url": "http://172.17.0.1:8081",
+      "health_endpoint": "/health",
+      "enabled": true
+    }
+  ]
+}
