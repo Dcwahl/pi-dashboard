@@ -39,15 +39,16 @@ async def collect_metrics_task():
             await metrics_history.add_metric('temperature', temp_data, timestamp)
             await metrics_history.add_metric('network', network_data, timestamp)
 
-            # Collect Docker metrics
-            docker_containers = get_docker_containers()
-            if 'containers' in docker_containers:
-                for container in docker_containers['containers']:
-                    await metrics_history.add_docker_metric(
-                        container['name'],
-                        container,
-                        timestamp
-                    )
+            # Docker metrics collection removed - not needed for historical data
+            # Only system metrics (CPU, memory, disk, temp, network) are tracked historically
+            # docker_containers = get_docker_containers()
+            # if 'containers' in docker_containers:
+            #     for container in docker_containers['containers']:
+            #         await metrics_history.add_docker_metric(
+            #             container['name'],
+            #             container,
+            #             timestamp
+            #         )
 
             # Flush to database periodically
             await metrics_history.flush_to_database()

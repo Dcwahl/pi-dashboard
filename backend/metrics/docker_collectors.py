@@ -19,22 +19,24 @@ def get_docker_containers():
         
         container_info = []
         for container in containers:
-            stats = None
-            if container.status == 'running':
-                try:
-                    # Get stats without streaming
-                    stats_stream = container.stats(stream=False)
-                    stats = {
-                        "cpu_percent": calculate_cpu_percent(stats_stream),
-                        "memory_usage": stats_stream['memory_stats'].get('usage', 0),
-                        "memory_limit": stats_stream['memory_stats'].get('limit', 0),
-                        "memory_percent": calculate_memory_percent(stats_stream),
-                        "network_rx": get_network_rx(stats_stream),
-                        "network_tx": get_network_tx(stats_stream),
-                    }
-                except Exception:
-                    stats = None
-            
+            # Stats collection commented out for performance - very slow on some systems
+            # Uncomment if you need per-container CPU/memory/network stats
+            # stats = None
+            # if container.status == 'running':
+            #     try:
+            #         # Get stats without streaming
+            #         stats_stream = container.stats(stream=False)
+            #         stats = {
+            #             "cpu_percent": calculate_cpu_percent(stats_stream),
+            #             "memory_usage": stats_stream['memory_stats'].get('usage', 0),
+            #             "memory_limit": stats_stream['memory_stats'].get('limit', 0),
+            #             "memory_percent": calculate_memory_percent(stats_stream),
+            #             "network_rx": get_network_rx(stats_stream),
+            #             "network_tx": get_network_tx(stats_stream),
+            #         }
+            #     except Exception:
+            #         stats = None
+
             container_info.append({
                 "id": container.short_id,
                 "name": container.name,
@@ -42,7 +44,7 @@ def get_docker_containers():
                 "status": container.status,
                 "state": container.attrs['State'],
                 "created": container.attrs['Created'],
-                "stats": stats
+                "stats": None  # Stats disabled for performance
             })
         
         return {
