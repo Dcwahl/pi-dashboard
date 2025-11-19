@@ -219,7 +219,7 @@ function App() {
 
       {servicesHealth && servicesHealth.services.length > 0 && (
         <div className="services-section">
-          <h2 className="section-title">External Services</h2>
+          <h2 className="section-title">Other Services</h2>
           <div className="services-grid">
             {servicesHealth.services.map((service, idx) => (
               <div key={idx} className="service-card">
