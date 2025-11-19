@@ -16,6 +16,7 @@ from metrics.collectors import (
 from metrics.docker_collectors import get_docker_containers, get_docker_images
 from database import init_database, cleanup_old_data
 from metrics_history import metrics_history
+from service_health import service_health_checker
 
 
 async def collect_metrics_task():
@@ -54,6 +55,15 @@ async def collect_metrics_task():
             print(f"Error collecting metrics: {e}")
         await asyncio.sleep(2)
 
+async def check_service_health_task():
+    """Background task to check service health every 10 seconds"""
+    while True:
+        try:
+            await service_health_checker.check_all_services()
+        except Exception as e:
+            print(f"Error checking service health: {e}")
+        await asyncio.sleep(10)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
@@ -63,18 +73,30 @@ async def lifespan(app: FastAPI):
     print("Database initialized")
 
     # Start background metrics collection
-    task = asyncio.create_task(collect_metrics_task())
+    metrics_task = asyncio.create_task(collect_metrics_task())
     print("Metrics collection started")
+    
+    # Start background service health checks
+    health_task = asyncio.create_task(check_service_health_task())
+    print("Service health checks started")
+    
     yield
 
     # Shutdown
-    task.cancel()
+    metrics_task.cancel()
+    health_task.cancel()
 
     try:
-        await task
+        await metrics_task
     except asyncio.CancelledError:
         pass
-    print("Metrics collection stopped")
+    
+    try:
+        await health_task
+    except asyncio.CancelledError:
+        pass
+    
+    print("Background tasks stopped")
 
 app = FastAPI(title="Pi Dashboard API", lifespan=lifespan)
 
@@ -195,6 +217,13 @@ async def get_container_names():
     """Get list of all tracked containers"""
     return {
         "containers": await metrics_history.get_all_container_names()
+    }
+
+@app.get("/api/services/health")
+def get_services_health():
+    """Get health status of all external services"""
+    return {
+        "services": service_health_checker.get_all_health_status()
     }
 
 @app.post("/api/admin/cleanup")

@@ -1,3 +1,4 @@
+Little monitoring dashboard for my Raspberry Pi 5
 
 Rebuild;
 `

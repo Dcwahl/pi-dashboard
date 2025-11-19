@@ -8,6 +8,7 @@ const API_URL = import.meta.env.PROD ? '' : 'http://localhost:8000'
 function App() {
   const [metrics, setMetrics] = useState(null)
   const [dockerData, setDockerData] = useState(null)
+  const [servicesHealth, setServicesHealth] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -32,14 +33,25 @@ function App() {
       }
     }
 
+    const fetchServicesHealth = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/services/health`)
+        setServicesHealth(response.data)
+      } catch (err) {
+        console.error('Services health fetch error:', err)
+      }
+    }
+
     // Fetch immediately
     fetchMetrics()
     fetchDocker()
+    fetchServicesHealth()
 
     // Then fetch every 2 seconds
     const interval = setInterval(() => {
       fetchMetrics()
       fetchDocker()
+      fetchServicesHealth()
     }, 5000)
 
     return () => clearInterval(interval)
@@ -52,7 +64,7 @@ function App() {
   return (
     <div className="App">
       <h1>Raspberry Pi Dashboard</h1>
-      
+
       <div className="metrics-grid">
         <CPUChart />
 
@@ -60,7 +72,7 @@ function App() {
           <h2>Memory</h2>
           <div className="metric-value">{metrics.memory.percent.toFixed(1)}%</div>
           <div className="metric-detail">
-            {(metrics.memory.used / 1024 / 1024 / 1024).toFixed(2)} GB / 
+            {(metrics.memory.used / 1024 / 1024 / 1024).toFixed(2)} GB /
             {(metrics.memory.total / 1024 / 1024 / 1024).toFixed(2)} GB
           </div>
         </div>
@@ -69,7 +81,7 @@ function App() {
           <h2>Disk Usage</h2>
           <div className="metric-value">{metrics.disk.percent.toFixed(1)}%</div>
           <div className="metric-detail">
-            {(metrics.disk.used / 1024 / 1024 / 1024).toFixed(2)} GB / 
+            {(metrics.disk.used / 1024 / 1024 / 1024).toFixed(2)} GB /
             {(metrics.disk.total / 1024 / 1024 / 1024).toFixed(2)} GB
           </div>
         </div>
@@ -202,6 +214,53 @@ function App() {
               </div>
             </>
           )}
+        </div>
+      )}
+
+      {servicesHealth && servicesHealth.services.length > 0 && (
+        <div className="services-section">
+          <h2 className="section-title">External Services</h2>
+          <div className="services-grid">
+            {servicesHealth.services.map((service, idx) => (
+              <div key={idx} className="service-card">
+                <div className="service-header">
+                  <div className="service-name">{service.name}</div>
+                  <div className={`health-badge ${service.status}`}>
+                    {service.status === 'healthy' ? '✓' : service.status === 'unhealthy' ? '✗' : '?'}
+                  </div>
+                </div>
+
+                <div className="service-url">{service.url}</div>
+
+                <div className="service-stats">
+                  <div className="stat-row">
+                    <span className="stat-label">Status:</span>
+                    <span className={`stat-value status-${service.status}`}>
+                      {service.status}
+                    </span>
+                  </div>
+                  {service.response_time_ms && (
+                    <div className="stat-row">
+                      <span className="stat-label">Response:</span>
+                      <span className="stat-value">{service.response_time_ms}ms</span>
+                    </div>
+                  )}
+                  {service.error && (
+                    <div className="stat-row">
+                      <span className="stat-label">Error:</span>
+                      <span className="stat-value error">{service.error}</span>
+                    </div>
+                  )}
+                  <div className="stat-row">
+                    <span className="stat-label">Last Check:</span>
+                    <span className="stat-value">
+                      {new Date(service.last_check).toLocaleTimeString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

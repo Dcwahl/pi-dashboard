@@ -223,3 +223,88 @@ h1 {
 .image-date {
   color: #666;
 }
+
+/* External Services Section */
+.services-section {
+  margin-top: 3rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.service-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.health-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.health-badge.healthy {
+  background: #4CAF50;
+  color: #000;
+}
+
+.health-badge.unhealthy {
+  background: #f44336;
+  color: #fff;
+}
+
+.health-badge.unknown {
+  background: #666;
+  color: #fff;
+}
+
+.service-url {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  font-family: monospace;
+}
+
+.service-stats {
+  margin-top: 1rem;
+}
+
+.stat-value.status-healthy {
+  color: #4CAF50;
+}
+
+.stat-value.status-unhealthy {
+  color: #f44336;
+}
+
+.stat-value.status-unknown {
+  color: #888;
+}
+
+.stat-value.error {
+  color: #ff9800;
+  font-size: 0.85rem;
+}

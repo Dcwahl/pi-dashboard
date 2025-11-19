@@ -1,0 +1,10 @@
+{
+  "services": [
+    {
+      "name": "Notification Server",
+      "url": "http://localhost:3000",
+      "health_endpoint": "/health",
+      "enabled": true
+    }
+  ]
+}
