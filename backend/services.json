@@ -2,7 +2,7 @@
   "services": [
     {
       "name": "Notification Server",
-      "url": "http://localhost:3000",
+      "url": "http://localhost:8081",
       "health_endpoint": "/health",
       "enabled": true
     }
