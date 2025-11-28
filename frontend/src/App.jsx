@@ -3,7 +3,7 @@ import axios from 'axios'
 import './App.css'
 import CPUChart from './components/CPUChart'
 
-const API_URL = import.meta.env.PROD ? '' : 'http://localhost:8000'
+const API_URL = import.meta.env.PROD ? '' : 'http://localhost:8000' //'http://dashboard-backend:8000'
 
 function App() {
   const [metrics, setMetrics] = useState(null)
@@ -134,17 +134,17 @@ function App() {
               <h2>Images</h2>
               <div className="metric-value">{dockerData.images.total}</div>
               <div className="metric-detail">
-                {(dockerData.images.images.reduce((acc, img) => acc + img.size, 0) / 1024 / 1024).toFixed(0)} MB total
+                {(dockerData.images?.images?.reduce((acc, img) => acc + img.size, 0) / 1024 / 1024).toFixed(0)} MB total
               </div>
             </div>
           </div>
 
           {/* Container Cards */}
-          {dockerData.containers.containers.length > 0 && (
+          {dockerData.containers.containers?.length > 0 && (
             <>
               <h3 className="subsection-title">Containers</h3>
               <div className="containers-grid">
-                {dockerData.containers.containers.map((container) => (
+                {dockerData.containers.containers?.map((container) => (
                   <div key={container.id} className="container-card">
                     <div className="container-header">
                       <div className="container-name">{container.name}</div>
@@ -180,9 +180,9 @@ function App() {
                       </div>
                     )}
 
-                    {container.state.Running && (
+                    {container.state?.Running && (
                       <div className="container-uptime">
-                        Started: {new Date(container.state.StartedAt).toLocaleString()}
+                        Started: {new Date(container.state?.StartedAt).toLocaleString()}
                       </div>
                     )}
                   </div>
@@ -192,11 +192,11 @@ function App() {
           )}
 
           {/* Images List */}
-          {dockerData.images.images.length > 0 && (
+          {dockerData.images.images?.length > 0 && (
             <>
               <h3 className="subsection-title">Images</h3>
               <div className="images-list">
-                {dockerData.images.images.map((image) => (
+                {dockerData.images.images?.map((image) => (
                   <div key={image.id} className="image-item">
                     <div className="image-tags">
                       {image.tags.map((tag, idx) => (

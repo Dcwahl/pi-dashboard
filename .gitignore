@@ -33,3 +33,6 @@ Thumbs.db
 backend/data/
 *.db
 *.db-journal
+
+#idk if people include these or not;
+*.tar

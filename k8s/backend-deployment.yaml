@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard-backend
+  template:
+    metadata:
+      labels:
+        app: dashboard-backend
+    spec:
+      containers:
+        - name: backend
+          # image: 192.168.0.134:5000/dashboard-backend:latest # <-- your image
+          image: dashboard-backend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000  # <-- change if your backend listens on another port
+          # If you need env vars, add here:
+          # env:
+          #   - name: SOME_VAR
+          #     value: "some-value"
+          readinessProbe:
+            httpGet:
+              path: / #/health      # <-- change to a real health path, or / if you don't have one
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /  #/health      # <-- same here
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10

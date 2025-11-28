@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ---- CONFIG ----
+PI_USER="diegowahl"
+PI_HOST="192.168.0.134"
+PI_DIR="/home/${PI_USER}"
+K8S_NAMESPACE="default"
+
+# ---- FUNCTIONS ----
+
+deploy_frontend() {
+  echo "🛠  Building frontend image..."
+  docker build -t dashboard-frontend:latest ./frontend
+
+  echo "📦 Saving image to tar..."
+  docker save dashboard-frontend:latest > /tmp/dashboard-frontend.tar
+
+  echo "🚚 Copying tar to Pi..."
+  scp /tmp/dashboard-frontend.tar "${PI_USER}@${PI_HOST}:${PI_DIR}/"
+
+  echo "📥 Importing image into k3s (on Pi)..."
+  ssh "${PI_USER}@${PI_HOST}" "cd ${PI_DIR} && sudo k3s ctr images import dashboard-frontend.tar"
+
+  echo "🔄 Restarting frontend deployment..."
+  kubectl rollout restart deployment/dashboard-frontend -n "${K8S_NAMESPACE}"
+
+  echo "✅ Frontend deploy complete."
+}
+
+deploy_backend() {
+  echo "🛠  Building backend image..."
+  docker build -t dashboard-backend:latest ./backend
+
+  echo "📦 Saving image to tar..."
+  docker save dashboard-backend:latest > /tmp/dashboard-backend.tar
+
+  echo "🚚 Copying tar to Pi..."
+  scp /tmp/dashboard-backend.tar "${PI_USER}@${PI_HOST}:${PI_DIR}/"
+
+  echo "📥 Importing image into k3s (on Pi)..."
+  ssh "${PI_USER}@${PI_HOST}" "cd ${PI_DIR} && sudo k3s ctr images import dashboard-backend.tar"
+
+  echo "🔄 Restarting backend deployment..."
+  kubectl rollout restart deployment/dashboard-backend -n "${K8S_NAMESPACE}"
+
+  echo "✅ Backend deploy complete."
+}
+
+usage() {
+  echo "Usage: $0 [frontend|backend|all]"
+  exit 1
+}
+
+# ---- MAIN ----
+
+TARGET="${1:-}"
+
+case "${TARGET}" in
+  frontend)
+    deploy_frontend
+    ;;
+  backend)
+    deploy_backend
+    ;;
+  all)
+    deploy_backend
+    deploy_frontend
+    ;;
+  *)
+    usage
+    ;;
+esac

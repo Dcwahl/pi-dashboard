@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard-frontend
+  template:
+    metadata:
+      labels:
+        app: dashboard-frontend
+    spec:
+      containers:
+        - name: frontend
+          # image: 192.168.0.134:5000/dashboard-frontend:latest
+          image: dashboard-frontend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80   # change if your frontend container listens elsewhere
+          env:
+            - name: API_URL
+              value: "api"   #"http://dashboard-backend:8000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
